@@ -83,6 +83,8 @@ function draw(){
 function mouseDragged(){
     if (gameState!=="launched"){
         Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
+        Matter.Body.applyForce(bird.body, bird.body.position, {x: 8, y: -5})
+
     }
 }
 
@@ -93,19 +95,25 @@ function mouseReleased(){
 }
 
 function keyPressed(){
-    if(keyCode === 32){
-       // slingshot.attach(bird.body);
+    if(keyCode === 32){ //space
+
+        bird.trajectory = []
+
+        Matter.Body.setPosition(bird.body, {x: 200,y: 50})
+
+        slingshot.attach(bird.body);
+        gameState = "onSling"
     }
 }
 
 async function getBackgroundImg(){
-    var response = await fetch("http://worldtimeapi.org/api/timezone/Asia/Kolkata");
+    var response = await fetch("http://worldtimeapi.org/api/timezone/America/Los_Angeles");
     var responseJSON = await response.json();
 
     var datetime = responseJSON.datetime;
     var hour = datetime.slice(11,13);
     
-    if(hour>=06 && hour<=19){
+    if(hour>=06 && hour<=17){
         bg = "sprites/bg1.png";
     }
     else{
